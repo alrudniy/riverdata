@@ -11,12 +11,12 @@ const RDStateSitesScreen = ({ route, navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [err, setErr] = useState('');
   const [sites, setSites] = useState([]);
+  const { stateId } = route.params;
 
   const handleClick = async () => {
     setIsLoading(true);
-
     try {
-      const response = await fetch('https://waterservices.usgs.gov/nwis/iv?format=json&stateCd=nj', {
+      const response = await fetch(`https://waterservices.usgs.gov/nwis/iv?format=json&stateCd=${stateId}`, {
         method: 'GET',
         headers: {
           Accept: 'application/json',
