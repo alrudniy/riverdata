@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, View, Text, FlatList, StatusBar } from 'react-native';
+import { ActivityIndicator, Button, View, Text, FlatList, StatusBar, StyleSheet } from 'react-native';
 import { NavigationActions } from "react-navigation";
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -7,13 +7,13 @@ import Item from './Item';
 
 const RDStateSitesScreen = ({ route, navigation }) => {
   const [data, setData] = useState({ value: { timeSeries: [] } });
-  const [isLoading, setIsLoading] = useState(false);
   const [err, setErr] = useState('');
   const [sites, setSites] = useState([]);
+  const [loading, setLoading] = useState(true);
   const { stateId } = route.params;
 
   const handleClick = async () => {
-    setIsLoading(true);
+    setLoading(true);
     try {
       const response = await fetch(`https://waterservices.usgs.gov/nwis/iv?format=json&stateCd=${stateId}`, {
         method: 'GET',
@@ -28,16 +28,11 @@ const RDStateSitesScreen = ({ route, navigation }) => {
 
       const result = await response.json();
 
-      console.log('result is: ', JSON.stringify(result, null, 4));
-      console.log("check1")
       setData(result);
-      console.log("check2")
     } catch (err) {
       setErr(err.message);
-    } finally {
-      setIsLoading(false);
-      console.log("check3")
     }
+    setLoading(false);
   }
 
   const processData = () => {
@@ -56,8 +51,10 @@ const RDStateSitesScreen = ({ route, navigation }) => {
         a["gauges"] = 1
         arr.push(a);
       }
-      setSites(arr);
     });
+    // Sort sites in alphabetical order by siteName
+    arr.sort((a, b) => a.siteName.localeCompare(b.siteName));
+    setSites(arr);
   }
 
   useEffect(() => {
@@ -66,39 +63,68 @@ const RDStateSitesScreen = ({ route, navigation }) => {
 
   useEffect(() => {
     processData();
-    console.log("sites are: ", sites);
   }, [data]);
 
-  console.log("check4")
-  console.log(data);
-  console.log("check5")
-  console.log(sites);
-  console.log("check6")
-
-  const renderSite = ({ item }) => (
-    <Item
-      key={`${item.siteName}_${item.siteValue}`}
-      label={item.siteName}
-      description={`${item.gauges} gauges`}
-      onPress={() => {
-        navigation.navigate('Site Gauges', { gaugeId: item.siteValue })
-      }}
-    />
-  );
-
   return (
-    <View style={{ flex: 1 }}>
-      {err && <Text>{err}</Text>}
-
-      {isLoading && <Text>Loading...</Text>}
-      <FlatList
-        data={sites}
-        renderItem={renderSite}
-        keyExtractor={(item) => `${item.siteName}_${item.siteValue}`}
-      />
+    <View style={styles.container}>
+      {err && <Text style={styles.error}>{err}</Text>}
+      {loading ? (
+        <ActivityIndicator size="large" color="#000" style={styles.loading} />
+      ) : (
+        <FlatList
+          data={sites}
+          renderItem={({ item }) => (
+            <View style={styles.item}>
+              <Item
+                key={`${item.siteName}_${item.siteValue}`}
+                label={item.siteName}
+                description={<Text style={styles.gauges}>{`${item.gauges} gauges`}</Text>}
+                onPress={() => {
+                  navigation.navigate('Site Gauges', { gaugeId: item.siteValue })
+                }}
+              />
+            </View>
+          )}
+          keyExtractor={(item) => `${item.siteName}_${item.siteValue}`}
+          ItemSeparatorComponent={() => <View style={styles.separator} />}
+        />
+      )}
       <StatusBar barStyle="light-content" />
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    paddingVertical: 20,
+    paddingHorizontal: 10,
+  },
+  error: {
+    color: '#f00',
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginTop: 20,
+  },
+  item: {
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    backgroundColor: '#f8f8f8',
+    borderRadius: 10,
+    marginBottom: 10,
+  },
+  siteName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  gauges: {
+    fontStyle: 'italic',
+  },
+});
+
+
 
 export default RDStateSitesScreen;

@@ -1,6 +1,6 @@
 // RDStates.js
 import React, { Component } from 'react';
-import { Button, View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { Button, View, Text, StyleSheet, FlatList, TouchableOpacity, TextInput } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {useState} from "react";
@@ -61,11 +61,16 @@ const states = [
 
 const StateList = ({ navigation }) => {
   const [selectedState, setSelectedState] = useState('');
+  const [searchText, setSearchText] = useState('');
 
   const handlePress = (id) => {
     setSelectedState(id);
     navigation.navigate('State Sites', { stateId: id });
   };
+
+  const filteredStates = states.filter((state) =>
+    state.name.toLowerCase().includes(searchText.toLowerCase())
+  );
 
   const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => handlePress(item.id)}>
@@ -78,8 +83,15 @@ const StateList = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <TextInput
+        style={styles.searchBar}
+        placeholder="Search for a state..."
+        placeholderTextColor="#8e8e8e"
+        onChangeText={setSearchText}
+        value={searchText}
+      />
       <FlatList
-        data={states}
+        data={filteredStates}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         extraData={selectedState}
@@ -92,6 +104,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
+  },
+  searchBar: {
+    height: 40,
+    borderWidth: 1,
+    borderRadius: 20,
+    borderColor: 'gray',
+    margin: 10,
+    paddingLeft: 20,
+    paddingRight: 20,
+    fontSize: 16,
+    color: '#333',
   },
   itemContainer: {
     flexDirection: 'row',
@@ -107,7 +130,7 @@ const styles = StyleSheet.create({
   itemText: {
     fontSize: 20,
     color: '#333333',
-  },
+  }
 });
 
 export default StateList;
