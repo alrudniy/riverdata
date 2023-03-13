@@ -37,7 +37,9 @@ const RDSiteGaugesScreen = ({ route }) => {
   }, [])
 
   const handleGaugePress = (item) => {
-    navigation.navigate('Gauge Graph', {gaugeId: gaugeId, parameterCode: item.variable.variableCode});
+    const { variableCode } = item.variable;
+    const parameterCode = variableCode ? variableCode[0].value : '';
+    navigation.navigate('Gauge Graph', { gaugeId: gaugeId, parameterCode: parameterCode });
   }
 
   const renderGauge = ({item}) => (

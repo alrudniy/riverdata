@@ -20,7 +20,7 @@ const RDGaugeGraphScreen = ({ route }) => {
     setIsLoading(false);
   };
 
-  const url = `http://waterdata.usgs.gov/nwisweb/graph?agency_cd=USGS&site_no=${gaugeId}&parm_cd=00065&period=7`;
+  const url = `http://waterdata.usgs.gov/nwisweb/graph?agency_cd=USGS&site_no=${gaugeId}&parm_cd=${parameterCode}&period=7`;
 
   return (
     <View style={{ flex: 1 }}>
