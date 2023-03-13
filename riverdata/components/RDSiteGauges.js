@@ -8,6 +8,7 @@ const RDSiteGaugesScreen = ({ route }) => {
   const [err, setErr] = useState('');
   const { gaugeId } = route.params;
   const navigation = useNavigation();
+  
 
   const handleClick = async () => {
     setIsLoading(true);
@@ -42,16 +43,23 @@ const RDSiteGaugesScreen = ({ route }) => {
     navigation.navigate('Gauge Graph', { gaugeId: gaugeId, parameterCode: parameterCode });
   }
 
-  const renderGauge = ({item}) => (
-    <TouchableOpacity style={styles.gaugeContainer} onPress={() => handleGaugePress(item)}>
-      <Text style={styles.gaugeName}>{item.variable.variableName}</Text>
-      <View style={styles.gaugeInfoContainer}>
-        <Text style={styles.gaugeValue}>Value: {item.values[0].value[0].value}</Text>
-        <Text style={styles.gaugeUnits}>Units: {item.variable.unit.unitCode}</Text>
-      </View>
-    </TouchableOpacity>
-  );
-
+  const renderGauge = ({item}) => {
+    const lastUpdateTime = new Date(item.values[0].value[0].dateTime);
+    const formattedUpdateTime = `${lastUpdateTime.toLocaleDateString()} ${lastUpdateTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+    return (
+      <TouchableOpacity style={styles.gaugeContainer} onPress={() => handleGaugePress(item)}>
+        <Text style={styles.gaugeName}>{item.variable.variableName}</Text>
+        <View style={styles.gaugeInfoContainer}>
+          <Text style={styles.gaugeValue}>Value: {item.values[0].value[0].value}</Text>
+          <Text style={styles.gaugeUnits}>Units: {item.variable.unit.unitCode}</Text>
+        </View>
+        <Text style={styles.lastUpdateTime}>Last Update: {formattedUpdateTime}</Text>
+      </TouchableOpacity>
+    );
+  };
+  
+  
+  
   return (
     <View style={styles.container}>
       {err && <Text style={styles.error}>{err}</Text>}
@@ -72,6 +80,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     padding: 20,
   },
+  lastUpdate: {
+    fontSize: 14,
+    marginTop: 5,
+  },
   error: {
     color: '#FF0000',
     fontSize: 18,
@@ -85,6 +97,20 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 10,
   },
+  lastUpdateContainer: {
+    flexDirection: 'row',
+    marginTop: 20,
+    marginBottom: 10,
+  },
+  lastUpdateText: {
+    fontSize: 14,
+    marginRight: 5,
+    color: '#696969',
+  },
+  lastUpdateTime: {
+    fontSize: 14,
+    color: '#6B6B6C',
+  },  
   gaugesList: {
     marginTop: 10,
   },
@@ -105,10 +131,12 @@ const styles = StyleSheet.create({
   gaugeValue: {
     fontSize: 14,
     marginRight: 10,
+    marginBottom: 5,
   },
   gaugeUnits: {
     fontSize: 14,
   },
 });
+
 
 export default RDSiteGaugesScreen;
