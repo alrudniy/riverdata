@@ -1,62 +1,62 @@
 // RDStates.js
 import React, { Component } from 'react';
-import { Button, View, Text, StyleSheet, FlatList, TouchableOpacity, TextInput } from 'react-native';
+import { Button, View, Text, StyleSheet, FlatList, TouchableOpacity, TextInput,Image } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {useState} from "react";
-import Icon from 'react-native-vector-icons/FontAwesome';
+import icons from './icons';
 
 const states = [
-   { id: 'al', name: 'Alabama' },
-  { id: 'ak', name: 'Alaska' },
-  { id: 'az', name: 'Arizona' },
-  { id: 'ar', name: 'Arkansas' },
-  { id: 'ca', name: 'California' },
-  { id: 'co', name: 'Colorado' },
-  { id: 'ct', name: 'Connecticut' },
-  { id: 'de', name: 'Delaware' },
-  { id: 'fl', name: 'Florida' },
-  { id: 'ga', name: 'Georgia' },
-  { id: 'hi', name: 'Hawaii' },
-  { id: 'id', name: 'Idaho' },
-  { id: 'il', name: 'Illinois' },
-  { id: 'in', name: 'Indiana' },
-  { id: 'ia', name: 'Iowa' },
-  { id: 'ks', name: 'Kansas' },
-  { id: 'ky', name: 'Kentucky' },
-  { id: 'la', name: 'Louisiana' },
-  { id: 'me', name: 'Maine' },
-  { id: 'md', name: 'Maryland' },
-  { id: 'ma', name: 'Massachusetts' },
-  { id: 'mi', name: 'Michigan' },
-  { id: 'mn', name: 'Minnesota' },
-  { id: 'ms', name: 'Mississippi' },
-  { id: 'mo', name: 'Missouri' },
-  { id: 'mt', name: 'Montana' },
-  { id: 'ne', name: 'Nebraska' },
-  { id: 'nv', name: 'Nevada' },
-  { id: 'nh', name: 'New Hampshire' },
-  { id: 'nj', name: 'New Jersey' },
-  { id: 'nm', name: 'New Mexico' },
-  { id: 'ny', name: 'New York' },
-  { id: 'nc', name: 'North Carolina' },
-  { id: 'nd', name: 'North Dakota' },
-  { id: 'oh', name: 'Ohio' },
-  { id: 'ok', name: 'Oklahoma' },
-  { id: 'or', name: 'Oregon' },
-  { id: 'pa', name: 'Pennsylvania' },
-  { id: 'ri', name: 'Rhode Island' },
-  { id: 'sc', name: 'South Carolina' },
-  { id: 'sd', name: 'South Dakota' },
-  { id: 'tn', name: 'Tennessee' },
-  { id: 'tx', name: 'Texas' },
-  { id: 'ut', name: 'Utah' },
-  { id: 'vt', name: 'Vermont' },
-  { id: 'va', name: 'Virginia' },
-  { id: 'wa', name: 'Washington' },
-  { id: 'wv', name: 'West Virginia' },
-  { id: 'wi', name: 'Wisconsin' },
-  { id: 'wy', name: 'Wyoming' },
+  { id: 'al', name: 'Alabama', icon: icons.al },
+  { id: 'ak', name: 'Alaska', icon: icons.ak },
+  { id: 'az', name: 'Arizona', icon: icons.az },
+  { id: 'ar', name: 'Arkansas', icon: icons.ar },
+  { id: 'ca', name: 'California', icon: icons.ca },
+  { id: 'co', name: 'Colorado', icon: icons.co },
+  { id: 'ct', name: 'Connecticut', icon: icons.ct },
+  { id: 'de', name: 'Delaware', icon: icons.de },
+  { id: 'fl', name: 'Florida', icon: icons.fl },
+  { id: 'ga', name: 'Georgia', icon: icons.ga },
+  { id: 'hi', name: 'Hawaii', icon: icons.hi },
+  { id: 'id', name: 'Idaho', icon: icons.id },
+  { id: 'il', name: 'Illinois', icon: icons.il },
+  { id: 'in', name: 'Indiana', icon: icons.ind },
+  { id: 'ia', name: 'Iowa', icon: icons.ia },
+  { id: 'ks', name: 'Kansas', icon: icons.ks },
+  { id: 'ky', name: 'Kentucky', icon: icons.ky },
+  { id: 'la', name: 'Louisiana', icon: icons.la },
+  { id: 'me', name: 'Maine', icon: icons.me },
+  { id: 'md', name: 'Maryland', icon: icons.md },
+  { id: 'ma', name: 'Massachusetts', icon: icons.ma },
+  { id: 'mi', name: 'Michigan', icon: icons.mi },
+  { id: 'mn', name: 'Minnesota', icon: icons.mn },
+  { id: 'ms', name: 'Mississippi', icon: icons.ms },
+  { id: 'mo', name: 'Missouri', icon: icons.mo },
+  { id: 'mt', name: 'Montana', icon: icons.mt },
+  { id: 'ne', name: 'Nebraska', icon: icons.ne },
+  { id: 'nv', name: 'Nevada', icon: icons.nv },
+  { id: 'nh', name: 'New Hampshire', icon: icons.nh },
+  { id: 'nj', name: 'New Jersey', icon: icons.nj },
+  { id: 'nm', name: 'New Mexico', icon: icons.nm },
+  { id: 'ny', name: 'New York', icon: icons.ny },
+  { id: 'nc', name: 'North Carolina', icon: icons.nc },
+  { id: 'nd', name: 'North Dakota', icon: icons.nd },
+  { id: 'oh', name: 'Ohio', icon: icons.oh },
+  { id: 'ok', name: 'Oklahoma', icon: icons.ok },
+  { id: 'or', name: 'Oregon', icon: icons.or },
+  { id: 'pa', name: 'Pennsylvania', icon: icons.pa },
+  { id: 'ri', name: 'Rhode Island', icon: icons.ri },
+  { id: 'sc', name: 'South Carolina', icon: icons.sc },
+  { id: 'sd', name: 'South Dakota', icon: icons.sd },
+  { id: 'tn', name: 'Tennessee', icon: icons.tn },
+  { id: 'tx', name: 'Texas', icon: icons.tx },
+  { id: 'ut', name: 'Utah', icon: icons.ut },
+  { id: 'vt', name: 'Vermont', icon: icons.vt },
+  { id: 'va', name: 'Virginia', icon: icons.va },
+  { id: 'wa', name: 'Washington', icon: icons.wa },
+  { id: 'wv', name: 'West Virginia', icon: icons.wv },
+  { id: 'wi', name: 'Wisconsin', icon: icons.wi },
+  { id: 'wy', name: 'Wyoming', icon: icons.wy },
 ];
 
 const StateList = ({ navigation }) => {
@@ -75,11 +75,12 @@ const StateList = ({ navigation }) => {
   const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => handlePress(item.id)}>
       <View style={styles.itemContainer}>
-        <Icon name="map-marker" size={20} color="black" style={styles.icon} />
+        {item.icon && <Image source={item.icon} style={{ width: 32, height: 32, marginRight: 10 }} resizeMode="contain" />}
         <Text style={styles.itemText}>{item.name}</Text>
       </View>
     </TouchableOpacity>
   );
+
 
   return (
     <View style={styles.container}>
@@ -99,6 +100,8 @@ const StateList = ({ navigation }) => {
     </View>
   );
 };
+
+
 
 const styles = StyleSheet.create({
   container: {

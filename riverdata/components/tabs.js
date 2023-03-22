@@ -5,6 +5,9 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import RDStatesScreen from './RDStates';
 import RDFavoritesTab from './RDFavoritesTab';
 import RDInfoTab from './RDInfoTab';
+import RDStateSitesScreen from './RDStateSites';
+import RDSiteGaugesScreen from './RDSiteGauges';
+import RDGaugeGraphScreen from './RDGaugeGraph';
 
 const Tab = createBottomTabNavigator();
 
@@ -23,15 +26,12 @@ const Tabs = () => {
             iconName = focused ? 'ios-information-circle' : 'ios-information-circle-outline';
           }
 
-          // You can return any component that you like here
           return <Ionicons name={iconName} size={size} color={color} />;
         },
+        tabBarActiveTintColor: '#125EA4',
+        tabBarInactiveTintColor: 'gray',
+        tabBarShowLabel: false,
       })}
-      tabBarOptions={{
-        activeTintColor: '#125EA4',
-        inactiveTintColor: 'gray',
-        showLabel: false,
-      }}
     >
       <Tab.Screen name="River Data" component={RDStatesScreen} />
       <Tab.Screen name="Favorites" component={RDFavoritesTab} />
@@ -39,5 +39,6 @@ const Tabs = () => {
     </Tab.Navigator>
   );
 };
+
 
 export default Tabs;

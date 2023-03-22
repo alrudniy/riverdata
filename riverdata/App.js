@@ -11,7 +11,6 @@ import RDStateSitesScreen from './components/RDStateSites';
 import RDSiteGaugesScreen from './components/RDSiteGauges';
 import RDGaugeGraphScreen from './components/RDGaugeGraph';
 
-
 const Stack = createNativeStackNavigator();
 
 function App() {
