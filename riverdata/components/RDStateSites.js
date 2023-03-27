@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Button, View, Text, FlatList, StatusBar, StyleSheet } from 'react-native';
+import { ActivityIndicator, Button, View, Text, FlatList, StatusBar, StyleSheet, TextInput } from 'react-native';
 import { NavigationActions } from "react-navigation";
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -10,6 +10,7 @@ const RDStateSitesScreen = ({ route, navigation }) => {
   const [err, setErr] = useState('');
   const [sites, setSites] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState('');
   const { stateId } = route.params;
 
   const handleClick = async () => {
@@ -65,14 +66,25 @@ const RDStateSitesScreen = ({ route, navigation }) => {
     processData();
   }, [data]);
 
+  const filteredSites = sites.filter((site) => {
+    return site.siteName.toLowerCase().includes(search.toLowerCase());
+  });
+
   return (
     <View style={styles.container}>
       {err && <Text style={styles.error}>{err}</Text>}
+      <TextInput
+        style={styles.searchBar}
+        placeholder="Search for a site..."
+        placeholderTextColor="#8e8e8e"
+        onChangeText={setSearch}
+        value={search}
+      />
       {loading ? (
         <ActivityIndicator size="large" color="#000" style={styles.loading} />
       ) : (
         <FlatList
-          data={sites}
+          data={filteredSites}
           renderItem={({ item }) => (
             <View style={styles.item}>
               <Item
@@ -100,6 +112,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingVertical: 20,
     paddingHorizontal: 10,
+    marginTop: 1,
   },
   error: {
     color: '#f00',
@@ -114,6 +127,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#f8f8f8',
     borderRadius: 10,
     marginBottom: 10,
+  },
+  searchBar: {
+    height: 40,
+    borderWidth: 1,
+    borderRadius: 20,
+    borderColor: 'gray',
+    margin: 10,
+    paddingLeft: 20,
+    paddingRight: 20,
+    fontSize: 16,
+    color: '#333',
+    marginHorizontal: 2,
+    marginTop: -10,
   },
   siteName: {
     fontSize: 18,
