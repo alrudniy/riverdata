@@ -1,16 +1,42 @@
-// RDGaugeGraph.js
-import React, { Component } from 'react';
-import { Button, View, Text } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import React, { useState, useEffect } from 'react';
+import { View, Text, ActivityIndicator } from 'react-native';
+import { WebView } from 'react-native-webview';
 
+const RDGaugeGraphScreen = ({ route }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [err, setErr] = useState('');
+  const { gaugeId, parameterCode } = route.params;
 
-const RDGaugeGraphScreen = ({ route, navigation }) => {
+  useEffect(() => {
+    setIsLoading(true);
+  }, []);
+
+  const onLoad = () => {
+    setIsLoading(false);
+  };
+
+  const onError = () => {
+    setErr('An error occurred while loading the graph.');
+    setIsLoading(false);
+  };
+
+  const url = `http://waterdata.usgs.gov/nwisweb/graph?agency_cd=USGS&site_no=${gaugeId}&parm_cd=${parameterCode}&period=7`;
+
   return (
-  <>  
-    <Text>This screen is where we will show the rendered graph. This is the last screen in the navigation stack
-    </Text>
-  </>
+    <View style={{ flex: 1 }}>
+      {isLoading && <ActivityIndicator size="large" />}
+      {err ? (
+        <Text>{err}</Text>
+      ) : (
+        <WebView
+          source={{ uri: url }}
+          onLoad={onLoad}
+          onError={onError}
+          javaScriptEnabled={true}
+          style={{ flex: 1 }}
+        />
+      )}
+    </View>
   );
 };
 

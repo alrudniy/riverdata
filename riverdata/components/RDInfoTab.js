@@ -8,6 +8,7 @@ const RDInfoTab = ({ route, navigation }) => {
     return (
     <>  
       <Text>Info Screen Placeholder
+        
       </Text>
     </>
     );
