@@ -62,9 +62,15 @@ const RDStateSitesScreen = ({ route, navigation }) => {
     handleClick();
   }, []);
 
-  useEffect(() => {
+useEffect(() => {
+  handleClick();
+}, []);
+
+useEffect(() => {
+  if (data.value && data.value.timeSeries && data.value.timeSeries.length > 0) {
     processData();
-  }, [data]);
+  }
+}, [data]);
 
   const filteredSites = sites.filter((site) => {
     return site.siteName.toLowerCase().includes(search.toLowerCase());
