@@ -31,11 +31,15 @@ const Tabs = () => {
         tabBarActiveTintColor: '#125EA4',
         tabBarInactiveTintColor: 'gray',
         tabBarShowLabel: false,
+        
       })}
     >
       <Tab.Screen name="River Data" component={RDStatesScreen} />
       <Tab.Screen name="Favorites" component={RDFavoritesTab} />
       <Tab.Screen name="Info" component={RDInfoTab} />
+      <Tab.Screen name="State Sites" component={RDStateSitesScreen} options={{ tabBarItemStyle: { display: 'none', }, }} />
+      <Tab.Screen name="Site Gauges" component={RDSiteGaugesScreen} options={{ tabBarItemStyle: { display: 'none', }, }} />
+      <Tab.Screen name="Gauge Graph" component={RDGaugeGraphScreen} options={{ tabBarItemStyle: { display: 'none', }, }} />
     </Tab.Navigator>
   );
 };
