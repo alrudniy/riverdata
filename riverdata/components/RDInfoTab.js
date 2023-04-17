@@ -3,6 +3,7 @@ import React, { Component , useState} from 'react';
 import { Button, View, Text, Switch } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Accordion from 'react-native-collapsible/Accordion';  // npm install --save react-native-collapsible
 
 const RDInfoTab = ({ route, navigation }) => {
 
@@ -11,7 +12,7 @@ const RDInfoTab = ({ route, navigation }) => {
 
   const [favText, setFavText] = useState('');
   const [numText, setNumText] = useState('');
-
+  
   const favoriteToggleSwitch = () => { 
     if(isFavoriteEnabled) {
       setFavText('App will not start on Favorites');
@@ -30,6 +31,52 @@ const RDInfoTab = ({ route, navigation }) => {
       setNumText('Sites Filtered');
     }
     setNumberEnabled(previousState => !previousState)
+  }
+
+  const SECTIONS = [
+    {
+      title: 'First',
+      content: 'Lorem ipsum...',
+    },
+    {
+      title: 'Second',
+      content: 'Lorem ipsum...',
+    },
+  ];
+  
+  class AccordionView extends Component {
+    state = {
+      activeSections: [],
+    };
+  
+    _renderSectionTitle = (section) => {
+      return (
+        <View style={styles.content}>
+          <Text>{section.content}</Text>
+        </View>
+      );
+    };
+  
+    _renderHeader = (section) => {
+      return (
+        <View style={styles.header}>
+          <Text style={styles.headerText}>{section.title}</Text>
+        </View>
+      );
+    };
+  
+    _renderContent = (section) => {
+      return (
+        <View style={styles.content}>
+          <Text>{section.content}</Text>
+        </View>
+      );
+    };
+  
+    _updateSections = (activeSections) => {
+      this.setState({ activeSections }
+        );
+    };
   }
 
   return (
@@ -60,8 +107,14 @@ const RDInfoTab = ({ route, navigation }) => {
       <Text>
       Version 1.0.0
       </Text>
+
+      <Accordion
+      activeSections={[0]}
+      sections={['Section 1', 'Section 2', 'Section 3']}
+   
+      />
     </>
     );
-  };
-  
+  }
+
   export default RDInfoTab;
