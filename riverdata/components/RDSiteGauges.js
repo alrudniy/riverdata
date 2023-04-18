@@ -59,7 +59,6 @@ const RDSiteGaugesScreen = ({ route }) => {
   };
   
   
-  
   return (
     <View style={styles.container}>
       {err && <Text style={styles.error}>{err}</Text>}
