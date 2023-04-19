@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createAppContainer } from "react-navigation";
@@ -16,6 +16,11 @@ const Stack = createNativeStackNavigator();
 
 function App() {
   const [isFavorited, setIsFavorited] = useState(false);
+  const [siteName, setSiteName] = useState('');
+
+  useEffect(() => {
+    setSiteName('');
+  }, []);
 
   return (
     <NavigationContainer>
@@ -25,17 +30,24 @@ function App() {
         <Stack.Screen 
           name="Site Gauges" 
           component={RDSiteGaugesScreen} 
-          options={{
+          options={({ route }) => ({ 
+            title: siteName || route.params.title, 
             headerStyle: {
               backgroundColor: '#fff',
+            },
+            headerTitleStyle: {
+              fontSize: 14,
             },
             headerRight: () => (
               <TouchableOpacity onPress={() => {
                   setIsFavorited(!isFavorited);
                 }}>
-                <Icon name={isFavorited ? 'heart' : 'heart-outline'} size={30} color="#000" />
+                <Icon name={isFavorited ? 'heart' : 'heart-outline'} size={30} color="#C41E3A" />
               </TouchableOpacity>
             ),
+          })}
+          listeners={({ route }) => {
+            setSiteName(route.params.title);
           }}
         />
         <Stack.Screen name="Gauge Graph" component={RDGaugeGraphScreen} />

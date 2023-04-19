@@ -11,6 +11,7 @@ const RDStateSitesScreen = ({ route, navigation }) => {
   const [sites, setSites] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
+  const [siteName, setSiteName] = useState('');
   const { stateId } = route.params;
 
   const handleClick = async () => {
@@ -62,19 +63,19 @@ const RDStateSitesScreen = ({ route, navigation }) => {
     handleClick();
   }, []);
 
-useEffect(() => {
-  handleClick();
-}, []);
-
-useEffect(() => {
-  if (data.value && data.value.timeSeries && data.value.timeSeries.length > 0) {
-    processData();
-  }
-}, [data]);
+  useEffect(() => {
+    if (data.value && data.value.timeSeries && data.value.timeSeries.length > 0) {
+      processData();
+    }
+  }, [data]);
 
   const filteredSites = sites.filter((site) => {
     return site.siteName.toLowerCase().includes(search.toLowerCase());
   });
+
+  const handlePress = (name) => {
+    setSiteName(name);
+  }
 
   return (
     <View style={styles.container}>

@@ -12,21 +12,23 @@ import RDGaugeGraphScreen from './RDGaugeGraph';
 const Tab = createBottomTabNavigator();
 
 const Tabs = () => {
+  const iconSize = 26; // Set a fixed size for the icons
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color, size }) => {
+        tabBarIcon: ({ focused, color }) => {
           let iconName;
           if (route.name === 'River Data') {
             iconName = focused
-              ? 'ios-water' : 'ios-water-outline';
+              ? 'water' : 'water-outline';
           } else if (route.name === 'Favorites') {
             iconName = focused ? 'ios-heart' : 'ios-heart-outline';
           } else if (route.name === 'Info') {
             iconName = focused ? 'ios-information-circle' : 'ios-information-circle-outline';
           }
 
-          return <Ionicons name={iconName} size={size} color={color} />;
+          return <Ionicons name={iconName} size={iconSize} color={color} />;
         },
         tabBarActiveTintColor: '#125EA4',
         tabBarInactiveTintColor: 'gray',

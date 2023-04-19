@@ -1,23 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useLayoutEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import he from 'he';
 
 const RDSiteGaugesScreen = ({ route }) => {
-  const [data, setData] = useState({value: {timeSeries: []}});
+  const [data, setData] = useState({ value: { timeSeries: [] } });
   const [isLoading, setIsLoading] = useState(false);
   const [err, setErr] = useState('');
   const { gaugeId } = route.params;
   const navigation = useNavigation();
-  
+  let controller = null;
 
   const handleClick = async () => {
     setIsLoading(true);
+    controller = new AbortController();
     try {
       const response = await fetch(`https://waterservices.usgs.gov/nwis/iv/?format=json&site=${gaugeId}`, {
         method: 'GET',
         headers: {
           Accept: 'application/json',
         },
+        signal: controller.signal,
       });
 
       if (!response.ok) {
@@ -33,31 +36,48 @@ const RDSiteGaugesScreen = ({ route }) => {
     }
   }
 
-  useEffect(()=> {
+  useEffect(() => {
     handleClick();
-  }, [])
+
+    return () => {
+      if (controller) {
+        controller.abort();
+      }
+    };
+  }, []);
+
+  useLayoutEffect(() => {
+    const siteName = data.value && data.value.timeSeries[0] && data.value.timeSeries[0].sourceInfo && data.value.timeSeries[0].sourceInfo.siteName;
+    navigation.setOptions({
+      title: siteName ? siteName : '',
+      // Display siteName as the header title
+      headerTitle: siteName ? siteName : '',
+    });
+  }, [navigation, data]);
 
   const handleGaugePress = (item) => {
     const { variableCode } = item.variable;
     const parameterCode = variableCode ? variableCode[0].value : '';
     navigation.navigate('Gauge Graph', { gaugeId: gaugeId, parameterCode: parameterCode });
   }
-
-  const renderGauge = ({item}) => {
+  
+  const renderGauge = ({ item }) => {
     const lastUpdateTime = new Date(item.values[0].value[0].dateTime);
-    const formattedUpdateTime = `${lastUpdateTime.toLocaleDateString()} ${lastUpdateTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+    const formattedUpdateTime = `${lastUpdateTime.toLocaleDateString()} ${lastUpdateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+    const gaugeName = he.decode(item.variable.variableName);
+    const gaugeUnits = he.decode(item.variable.unit.unitCode);
     return (
       <TouchableOpacity style={styles.gaugeContainer} onPress={() => handleGaugePress(item)}>
-        <Text style={styles.gaugeName}>{item.variable.variableName}</Text>
+        <Text style={styles.gaugeName}>{gaugeName}</Text>
         <View style={styles.gaugeInfoContainer}>
           <Text style={styles.gaugeValue}>Value: {item.values[0].value[0].value}</Text>
-          <Text style={styles.gaugeUnits}>Units: {item.variable.unit.unitCode}</Text>
+          <Text style={styles.gaugeUnits}>Units: {gaugeUnits}</Text>
         </View>
         <Text style={styles.lastUpdateTime}>Last Update: {formattedUpdateTime}</Text>
       </TouchableOpacity>
     );
   };
-  
+
   
   return (
     <View style={styles.container}>

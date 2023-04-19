@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
 import { WebView } from 'react-native-webview';
 import Slider from '@react-native-community/slider';
@@ -23,46 +23,44 @@ const RDGaugeGraphScreen = ({ route }) => {
     }, 3000);
   }, [days]);
 
-  const daysText = useMemo(() => {
-    return (
-      <Text>
-        <Text style={styles.daysTextActive}>Days: </Text>
-        <Text style={styles.daysNumberActive}>{days}</Text>
-      </Text>
-    );
-  }, [days]);
+  const onLoad = () => {
+    setIsLoading(false);
+  };
 
-  const onSliderValueChange = (value) => {
-    if (value < 7) {
-      setDays(7);
-    } else if (value > 119) {
-      setDays(119);
-    } else {
-      setDays(value);
+  const onError = () => {
+    setErr('An error occurred while loading the graph.');
+    setIsLoading(false);
+  };
+
+  const handleAddDays = () => {
+    if (days < 119) {
+      setDays(days + 1);
+    }
+  };
+
+  const handleRemoveDays = () => {
+    if (days > 7) {
+      setDays(days - 1);
     }
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.sliderContainer}>
-        <Icon name="remove-circle-outline" size={25} color='#4F4E4E' onPress={() => onSliderValueChange(days - 1)} />
+        <Icon name="remove-circle-outline" size={25} color='#4F4E4E' onPress={handleRemoveDays} />
         <Slider
-          style={styles.slider}
+          style={styles.slider} 
           minimumValue={7}
           maximumValue={119}
           step={1}
           value={days}
-          onValueChange={onSliderValueChange}
+          onValueChange={(value) => setDays(value)}
           minimumTrackTintColor="#125EA4"
           maximumTrackTintColor="rgba(0, 0, 0, 0.2)"
           thumbTintColor="#125EA4"
-        />
-        <Icon name="add-circle-outline" size={25} color='#4F4E4E' onPress={() => onSliderValueChange(days + 1)} />
-      </View>
-      <View style={styles.daysContainer}>
-        <Text style={styles.daysText}>7 days</Text>
-        <Text style={styles.daysNumberActive}>{daysText}</Text>
-        <Text style={styles.daysText}>119 days</Text>
+          />
+        <Icon name="add-circle-outline" size={25} color='#4F4E4E' onPress={handleAddDays} />
+        <Text style={styles.sliderText}>Days: {days}</Text>
       </View>
       {isLoading && <ActivityIndicator size="large" />}
       {err ? (
@@ -70,11 +68,8 @@ const RDGaugeGraphScreen = ({ route }) => {
       ) : (
         <WebView
           source={{ uri: `http://waterdata.usgs.gov/nwisweb/graph?agency_cd=USGS&site_no=${gaugeId}&parm_cd=${parameterCode}&period=${days}` }}
-          onLoad={() => setIsLoading(false)}
-          onError={() => {
-            setErr('An error occurred while loading the graph.');
-            setIsLoading(false);
-          }}
+          onLoad={onLoad}
+          onError={onError}
           javaScriptEnabled={true}
           style={styles.webView}
         />
@@ -91,7 +86,6 @@ const styles = StyleSheet.create({
   sliderContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
     backgroundColor: 'transparent',
     paddingHorizontal: 15,
     marginTop: 10,
@@ -100,32 +94,11 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 40,
   },
-  daysContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginHorizontal: 15,
-    marginTop: -2,
-    marginBottom: 15,
-  },
-  daysText: {
-    fontSize: 14,
+  sliderText: {
+    fontSize: 16,
     fontWeight: 'bold',
+    marginLeft: 10,
     color: '#4F4E4E',
-  },
-  daysNumberActive: {
-    fontWeight: 'bold',
-    fontSize: 14,
-    color: '#20629F',
-    marginLeft: 14,
-    marginRight: 10,
-    marginTop: -2,
-  },
-  daysTextActive: {
-    fontWeight: 'bold',
-    fontSize: 14,
-    color: '#4F4E4E',
-    marginRight: 10,
   },
   webView: {
     flex: 1,
