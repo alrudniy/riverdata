@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Button, View, Text, FlatList, StatusBar, StyleSheet, TextInput } from 'react-native';
+import React, { useEffect, useState, useLayoutEffect } from 'react';
+import { ActivityIndicator, TouchableOpacity, View, Text, FlatList, StatusBar, StyleSheet, TextInput } from 'react-native';
 import { NavigationActions } from "react-navigation";
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import Item from './Item';
 
 const RDStateSitesScreen = ({ route, navigation }) => {
@@ -12,6 +13,9 @@ const RDStateSitesScreen = ({ route, navigation }) => {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [siteName, setSiteName] = useState('');
+  const [stateName, setStateName] = useState('');
+  const [filterNumbers, setFilterNumbers] = useState(false); // new state variable
+
   const { stateId } = route.params;
 
   const handleClick = async () => {
@@ -31,6 +35,7 @@ const RDStateSitesScreen = ({ route, navigation }) => {
       const result = await response.json();
 
       setData(result);
+      setStateName(result.value.timeSeries[0].sourceInfo.state);
     } catch (err) {
       setErr(err.message);
     }
@@ -71,12 +76,28 @@ const RDStateSitesScreen = ({ route, navigation }) => {
 
   const filteredSites = sites.filter((site) => {
     return site.siteName.toLowerCase().includes(search.toLowerCase());
+  }).filter((site) => {
+    return !filterNumbers || /^[^a-zA-Z]/.test(site.siteName) === false;
   });
-
+  
   const handlePress = (name) => {
     setSiteName(name);
   }
 
+  const handleFilterNumbers = () => {
+    setFilterNumbers(!filterNumbers);
+  } // new function to toggle filterNumbers state variable
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity onPress={handleFilterNumbers} style={styles.filterButton}>
+          <Ionicons name={filterNumbers ? "filter" : "filter-outline"} size={24} />
+        </TouchableOpacity>
+      ),
+    });
+  }, [filterNumbers, navigation]);
+  
   return (
     <View style={styles.container}>
       {err && <Text style={styles.error}>{err}</Text>}

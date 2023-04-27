@@ -63,9 +63,9 @@ const StateList = ({ navigation }) => {
   const [selectedState, setSelectedState] = useState('');
   const [searchText, setSearchText] = useState('');
 
-  const handlePress = (id) => {
+  const handlePress = (id, name) => {
     setSelectedState(id);
-    navigation.navigate('State Sites', { stateId: id });
+    navigation.navigate('State Sites', { stateId: id, stateName: name });
   };
 
   const filteredStates = states.filter((state) =>

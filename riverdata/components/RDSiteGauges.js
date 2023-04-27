@@ -7,6 +7,9 @@ const RDSiteGaugesScreen = ({ route }) => {
   const [data, setData] = useState({ value: { timeSeries: [] } });
   const [isLoading, setIsLoading] = useState(false);
   const [err, setErr] = useState('');
+  const [latitude, setLatitude] = useState(null);
+  const [longitude, setLongitude] = useState(null);
+  const [gaugeLocations, setGaugeLocations] = useState({});
   const { gaugeId } = route.params;
   const navigation = useNavigation();
   let controller = null;
@@ -29,6 +32,14 @@ const RDSiteGaugesScreen = ({ route }) => {
 
       const result = await response.json();
       setData(result);
+      const locations = {};
+      result.value.timeSeries.forEach(series => {
+        const siteName = series.sourceInfo.siteName;
+        const latitude = series.sourceInfo.geoLocation.latitude;
+        const longitude = series.sourceInfo.geoLocation.longitude;
+        locations[siteName] = { latitude, longitude };
+      });
+      setGaugeLocations(locations);
     } catch (err) {
       setErr(err.message);
     } finally {
