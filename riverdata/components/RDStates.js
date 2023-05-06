@@ -1,8 +1,9 @@
 // RDStates.js
-import React, { Component } from 'react';
+import React, { useLayoutEffect } from 'react';
 import { Button, View, Text, StyleSheet, FlatList, TouchableOpacity, TextInput,Image } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Ionicons } from '@expo/vector-icons';
 import {useState} from "react";
 import icons from './icons';
 
@@ -81,16 +82,31 @@ const StateList = ({ navigation }) => {
     </TouchableOpacity>
   );
 
+  const handleMapPress = () => {
+    navigation.navigate('USGS Map');
+  };
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity onPress={handleMapPress} style={styles.mapIcon}>
+          <Ionicons name="map-outline" size={28} color="#333" />
+        </TouchableOpacity>
+      ),
+    });
+  }, [navigation]);
 
   return (
     <View style={styles.container}>
-      <TextInput
-        style={styles.searchBar}
-        placeholder="Search for a state..."
-        placeholderTextColor="#8e8e8e"
-        onChangeText={setSearchText}
-        value={searchText}
-      />
+      <View style={styles.header}>
+        <TextInput
+          style={styles.searchBar}
+          placeholder="Search for a state..."
+          placeholderTextColor="#8e8e8e"
+          onChangeText={setSearchText}
+          value={searchText}
+        />
+      </View>
       <FlatList
         data={filteredStates}
         renderItem={renderItem}
@@ -104,6 +120,9 @@ const StateList = ({ navigation }) => {
 
 
 const styles = StyleSheet.create({
+  mapIcon: {
+    marginRight: 15,
+  },
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',

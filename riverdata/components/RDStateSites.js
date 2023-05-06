@@ -1,10 +1,13 @@
 import React, { useEffect, useState, useLayoutEffect } from 'react';
-import { ActivityIndicator, TouchableOpacity, View, Text, FlatList, StatusBar, StyleSheet, TextInput } from 'react-native';
+import { Animated, ActivityIndicator, TouchableOpacity, View, Text, FlatList, StatusBar, StyleSheet, TextInput } from 'react-native';
 import { NavigationActions } from "react-navigation";
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Item from './Item';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
+
 
 const RDStateSitesScreen = ({ route, navigation }) => {
   const [data, setData] = useState({ value: { timeSeries: [] } });
@@ -97,6 +100,102 @@ const RDStateSitesScreen = ({ route, navigation }) => {
       ),
     });
   }, [filterNumbers, navigation]);
+
+  const fetchFavoritedStatus = async () => {
+    try {
+      const favorites = JSON.parse(await AsyncStorage.getItem('favorites')) || [];
+      const newFavoritedStatus = {};
+  
+      favorites.forEach((favorite) => {
+        const siteKey = `${favorite.siteName}_${favorite.siteValue}`;
+        newFavoritedStatus[siteKey] = true;
+      });
+  
+      setFavoritedStatus(newFavoritedStatus);
+    } catch (error) {
+      console.error('Error fetching favorited status:', error);
+    }
+  };
+
+  useEffect(() => {
+    handleClick();
+    fetchFavoritedStatus();
+  }, []);  
+  
+  const handleFavorite = async (site) => {
+    let favorited = false;
+    try {
+      const favorites = JSON.parse(await AsyncStorage.getItem('favorites')) || [];
+      const index = favorites.findIndex((favorite) => favorite.siteValue === site.siteValue);
+  
+      if (index >= 0) {
+        // Remove site from favorites if it's already there
+        favorites.splice(index, 1);
+      } else {
+        // Add site to favorites if it's not there
+        favorites.push(site);
+        favorited = true;
+      }
+  
+      await AsyncStorage.setItem('favorites', JSON.stringify(favorites));
+    } catch (error) {
+      console.error('Error handling favorite site:', error);
+    }
+    return favorited;
+  };
+  
+  const [favoritedStatus, setFavoritedStatus] = useState({});
+
+  const renderSwipeableItem = ({ item }) => {
+    const siteKey = `${item.siteName}_${item.siteValue}`;
+    const isFavorited = favoritedStatus[siteKey] || false;
+  
+    const rightSwipe = (progress, dragX) => {
+      const scale = dragX.interpolate({
+        inputRange: [-80, 0],
+        outputRange: [1, 0],
+        extrapolate: 'clamp',
+      });
+    
+      return (
+        <TouchableOpacity
+          onPress={async () => {
+            const updatedFavoritedStatus = await handleFavorite(item);
+            setFavoritedStatus({ ...favoritedStatus, [siteKey]: updatedFavoritedStatus });
+          }}
+          style={[
+            styles.swipeButton,
+            isFavorited ? styles.swipeButtonFavorited : styles.swipeButtonNotFavorited,
+          ]}
+        >
+          <Animated.View style={{ transform: [{ scale }] }}>
+            <Ionicons
+              name={isFavorited ? 'heart' : 'heart-outline'}
+              size={28}
+              color="white"
+            />
+          </Animated.View>
+        </TouchableOpacity>
+      );
+    };
+    
+  
+    return (
+      <Swipeable renderRightActions={rightSwipe}>
+        <View style={styles.item}>
+          <Item
+            key={siteKey}
+            label={item.siteName}
+            description={<Text style={styles.gauges}>{`${item.gauges} gauges`}</Text>}
+            onPress={() => {
+              navigation.navigate('Site Gauges', { gaugeId: item.siteValue });
+            }}
+          />
+        </View>
+      </Swipeable>
+    );
+  };
+  
   
   return (
     <View style={styles.container}>
@@ -113,18 +212,7 @@ const RDStateSitesScreen = ({ route, navigation }) => {
       ) : (
         <FlatList
           data={filteredSites}
-          renderItem={({ item }) => (
-            <View style={styles.item}>
-              <Item
-                key={`${item.siteName}_${item.siteValue}`}
-                label={item.siteName}
-                description={<Text style={styles.gauges}>{`${item.gauges} gauges`}</Text>}
-                onPress={() => {
-                  navigation.navigate('Site Gauges', { gaugeId: item.siteValue })
-                }}
-              />
-            </View>
-          )}
+          renderItem={renderSwipeableItem}
           keyExtractor={(item) => `${item.siteName}_${item.siteValue}`}
           ItemSeparatorComponent={() => <View style={styles.separator} />}
         />
@@ -177,6 +265,20 @@ const styles = StyleSheet.create({
   gauges: {
     fontStyle: 'italic',
   },
+  swipeButton: {
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 10,
+    marginBottom: 10,
+  },
+  swipeButtonNotFavorited: {
+    backgroundColor: '#125EA4',
+  },
+  swipeButtonFavorited: {
+    backgroundColor: '#C41E3A',
+  },  
 });
 
 

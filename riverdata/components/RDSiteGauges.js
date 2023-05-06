@@ -64,7 +64,7 @@ const RDSiteGaugesScreen = ({ route }) => {
       // Display siteName as the header title
       headerTitle: siteName ? siteName : '',
     });
-  }, [navigation, data]);
+  },);
 
   const handleGaugePress = (item) => {
     const { variableCode } = item.variable;

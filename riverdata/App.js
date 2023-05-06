@@ -1,11 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect} from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createAppContainer } from "react-navigation";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Tabs from './components/tabs';
+import USGSMap from './components/USGSMap';
 
 import RDStatesScreen from './components/RDStates';
 import RDStateSitesScreen from './components/RDStateSites';
@@ -38,19 +39,14 @@ function App() {
             headerTitleStyle: {
               fontSize: 14,
             },
-            headerRight: () => (
-              <TouchableOpacity onPress={() => {
-                  setIsFavorited(!isFavorited);
-                }}>
-                <Icon name={isFavorited ? 'heart' : 'heart-outline'} size={30} color="#C41E3A" />
-              </TouchableOpacity>
-            ),
           })}
           listeners={({ route }) => {
             setSiteName(route.params.title);
           }}
         />
         <Stack.Screen name="Gauge Graph" component={RDGaugeGraphScreen} />
+        <Stack.Screen name="USGS Map" component={USGSMap} options={{ headerShown: false }}/>
+
       </Stack.Navigator>
     </NavigationContainer>
   );
