@@ -83,7 +83,7 @@ const StateList = ({ navigation }) => {
   );
 
   const handleMapPress = () => {
-    navigation.navigate('USGS Map');
+    navigation.navigate('USGS Map Screen');
   };
 
   useLayoutEffect(() => {

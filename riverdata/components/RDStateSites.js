@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useLayoutEffect } from 'react';
-import { Animated, ActivityIndicator, TouchableOpacity, View, Text, FlatList, StatusBar, StyleSheet, TextInput } from 'react-native';
+import { Animated, ActivityIndicator, TouchableOpacity, View, Text, FlatList, StyleSheet, TextInput } from 'react-native';
 import { NavigationActions } from "react-navigation";
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -17,7 +17,9 @@ const RDStateSitesScreen = ({ route, navigation }) => {
   const [search, setSearch] = useState('');
   const [siteName, setSiteName] = useState('');
   const [stateName, setStateName] = useState('');
-  const [filterNumbers, setFilterNumbers] = useState(false); // new state variable
+  const [filterNumbers, setFilterNumbers] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState(''); 
+  
 
   const { stateId } = route.params;
 
@@ -208,7 +210,11 @@ const RDStateSitesScreen = ({ route, navigation }) => {
         value={search}
       />
       {loading ? (
-        <ActivityIndicator size="large" color="#000" style={styles.loading} />
+             <View style={styles.loadingContainer}>
+             <Text style={styles.loadingText}>{loadingMessage}</Text>
+             <ActivityIndicator size="large" color="#125EA4" style={styles.loading} />
+             <Text style={styles.loadingText}>Loading Sites</Text>
+           </View>
       ) : (
         <FlatList
           data={filteredSites}
@@ -217,10 +223,10 @@ const RDStateSitesScreen = ({ route, navigation }) => {
           ItemSeparatorComponent={() => <View style={styles.separator} />}
         />
       )}
-      <StatusBar barStyle="light-content" />
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {
@@ -264,6 +270,23 @@ const styles = StyleSheet.create({
   },
   gauges: {
     fontStyle: 'italic',
+  },
+    loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#125EA4',
   },
   swipeButton: {
     justifyContent: 'center',

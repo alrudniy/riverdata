@@ -1,19 +1,62 @@
-import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect} from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { createAppContainer } from "react-navigation";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Icon from 'react-native-vector-icons/Ionicons';
-import Tabs from './components/tabs';
-import USGSMap from './components/USGSMap';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import RDStatesScreen from './components/RDStates';
+import RDFavoritesTab from './components/RDFavoritesTab';
+import RDInfoTab from './components/RDInfoTab';
 import RDStateSitesScreen from './components/RDStateSites';
 import RDSiteGaugesScreen from './components/RDSiteGauges';
 import RDGaugeGraphScreen from './components/RDGaugeGraph';
+import USGSMap from './components/USGSMap';
 
 const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
+
+const RDStatesStack = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="River Data" component={RDStatesScreen} options={{
+          headerStyle: {
+            backgroundColor: '#fff',
+          },
+          headerTitleStyle: {
+            fontSize: 14,
+          },
+        }}/>
+      <Stack.Screen
+        name="State Sites"
+        component={RDStateSitesScreen}
+        options={{
+          headerStyle: {
+            backgroundColor: '#fff',
+          },
+          headerTitleStyle: {
+            fontSize: 14,
+          },
+        }}
+      />
+      <Stack.Screen
+        name="Site Gauges"
+        component={RDSiteGaugesScreen}
+        options={({ route }) => ({
+          title: route.params?.title ?? '',
+          headerStyle: {
+            backgroundColor: '#fff',
+          },
+          headerTitleStyle: {
+            fontSize: 14,
+          },
+        })}
+      />
+      <Stack.Screen name="Gauge Graph" component={RDGaugeGraphScreen} />
+      <Stack.Screen name="USGS Map Screen" component={USGSMap} />
+    </Stack.Navigator>
+  );
+};
 
 function App() {
   const [isFavorited, setIsFavorited] = useState(false);
@@ -23,31 +66,49 @@ function App() {
     setSiteName('');
   }, []);
 
+  const iconSize = 26; // Set a fixed size for the icons
+
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Tabs" component={Tabs} options={{ headerShown: false }}/>
-        <Stack.Screen name="State Sites" component={RDStateSitesScreen} />
-        <Stack.Screen 
-          name="Site Gauges" 
-          component={RDSiteGaugesScreen} 
-          options={({ route }) => ({ 
-            title: siteName || route.params.title, 
-            headerStyle: {
-              backgroundColor: '#fff',
-            },
-            headerTitleStyle: {
-              fontSize: 14,
-            },
-          })}
-          listeners={({ route }) => {
-            setSiteName(route.params.title);
-          }}
-        />
-        <Stack.Screen name="Gauge Graph" component={RDGaugeGraphScreen} />
-        <Stack.Screen name="USGS Map" component={USGSMap} options={{ headerShown: false }}/>
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color }) => {
+            let iconName;
+            if (route.name === 'River Data') {
+              iconName = focused ? 'water' : 'water-outline';
+            } else if (route.name === 'Favorites') {
+              iconName = focused ? 'ios-heart' : 'ios-heart-outline';
+            } else if (route.name === 'About River Data') {
+              iconName = focused
+                ? 'ios-information-circle'
+                : 'ios-information-circle-outline';
+            } else if (route.name === 'USMap') {
+              iconName = 'map-outline';
+            }
 
-      </Stack.Navigator>
+            return <Ionicons name={iconName} size={iconSize} color={color} />;
+          },
+          tabBarActiveTintColor: '#125EA4',
+          tabBarInactiveTintColor: 'gray',
+          tabBarShowLabel: false,
+        })}
+      >
+        <Tab.Screen
+          name="River Data"
+          component={RDStatesStack}
+          options={{ headerShown: false}}
+        />
+        <Tab.Screen
+          name="Favorites"
+          component={RDFavoritesTab}
+          options={{ headerTitle: 'Favorites' }}
+        />
+        <Tab.Screen
+          name="About River Data"
+          component={RDInfoTab}
+          options={{ headerTitle: 'About River Data' }}
+        />
+      </Tab.Navigator>
     </NavigationContainer>
   );
 }
