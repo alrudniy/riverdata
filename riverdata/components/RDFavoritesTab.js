@@ -93,14 +93,22 @@ const RDFavoritesTab = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={favorites}
-        renderItem={renderSwipeableItem}
-        keyExtractor={(item) => `${item.siteName}_${item.siteValue}`}
-      />
+      {favorites.length > 0 ? (
+        <FlatList
+          data={favorites}
+          renderItem={renderSwipeableItem}
+          keyExtractor={(item) => `${item.siteName}_${item.siteValue}`}
+        />
+      ) : (
+        <View style={styles.noFavoritesContainer}>
+            <View style={styles.box}>
+          <Text style={styles.noFavoritesText}>Your favorite sites will appear here</Text>
+        </View>
+        </View>
+      )}
     </View>
   );
-};
+   };  
 
 const styles = StyleSheet.create({
   container: {
@@ -117,6 +125,18 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 10,
   },
+  box: {
+    backgroundColor: '#F0F0F0',
+    borderRadius: 10,
+    padding: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 3,
+  },
   gauges: {
     fontStyle: 'italic',
   },
@@ -129,6 +149,16 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     backgroundColor: '#C41E3A',
   },  
+  noFavoritesContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 150,
+  },
+  noFavoritesText: {
+    fontSize: 16,
+    color: '#5A5A5A',
+  },
 });
 
 export default RDFavoritesTab;

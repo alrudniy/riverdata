@@ -53,7 +53,7 @@ const RDStatesStack = () => {
         })}
       />
       <Stack.Screen name="Gauge Graph" component={RDGaugeGraphScreen} />
-      <Stack.Screen name="USGS Map Screen" component={USGSMap} />
+      <Stack.Screen name="Map" component={USGSMap} />
     </Stack.Navigator>
   );
 };
