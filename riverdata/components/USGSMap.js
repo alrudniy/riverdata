@@ -5,8 +5,7 @@ import ClusteredMapView from 'react-native-map-clustering';
 import _ from 'lodash';
 
 const states = [
-  { id: 'AL' }, { id: 'AK' }, { id: 'AZ' }, { id: 'AR' }, { id: 'CA' },
-  { id: 'CO' }
+  { id: 'AL' }, { id: 'AK' }, { id: 'AZ' }, { id: 'CO' }
 ];
 
 const USGSMap = () => {
@@ -85,7 +84,7 @@ const USGSMap = () => {
         clusterColor="#00BFFF"
         animateClusters={false}
         mapType="standard"
-        radius={100} // Adjust the clustering radius
+        radius={100} 
       >
         {mappedData.map((marker, index) => renderMarker(marker, index))}
       </ClusteredMapView>

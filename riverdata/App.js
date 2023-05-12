@@ -68,6 +68,7 @@ function App() {
 
   const iconSize = 26; // Set a fixed size for the icons
 
+
   return (
     <NavigationContainer>
       <Tab.Navigator
