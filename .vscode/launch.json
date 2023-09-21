@@ -1,0 +1,26 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+
+
+
+        Debug
+        {
+            "type": "node-terminal",
+            "name": "npm run web",
+            "request": "launch",
+            "command": "npm run web",
+            "cwd": "${workspaceFolder}/riverdata",
+            "env": {
+                "NODE_OPTIONS": "--openssl-legacy-provider"
+              }
+        },
+        {
+            "type": "node-terminal",
+            "name": "npm run ios",
+            "request": "launch",
+            "command": "npm run ios",
+            "cwd": "${workspaceFolder}/riverdata"
+        }
+    ]
+}
