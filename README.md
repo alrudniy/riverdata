@@ -10,6 +10,24 @@ River Data application written in React Native
 
 * [XCode version 14+](https://apps.apple.com/us/app/xcode/id497799835?mt=12/) (for running ios)
 
+# Cloing this repository
+
+1. `$ git clone git@github.com:alrudniy/riverdata.git`
+1. `$ cd riverdata/riverdata`
+1. `$ npm install`
+
+Now you should be able to run on your given platform.
+
+## iOS Specific steps
+
+1. cd riverdata/riverdata/ios
+1. pod install
+
+If you are running XCode 15, please do the following:
+
+1. Navigate to `riverdata/riverdata/ios/Pods/` and open `Pods.xcodeproj`.
+1. Follow the instructions [in this issue comment](https://github.com/facebook/react-native/issues/37748) from June 7 and add the preprocessor macro: `_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION`
+
 # Running the Project from a Terminal
 
 The first time you clone the project you will need to run:

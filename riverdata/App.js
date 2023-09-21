@@ -11,7 +11,7 @@ import RDInfoTab from './components/RDInfoTab';
 import RDStateSitesScreen from './components/RDStateSites';
 import RDSiteGaugesScreen from './components/RDSiteGauges';
 import RDGaugeGraphScreen from './components/RDGaugeGraph';
-import USGSMap from './components/USGSMap';
+import USGSMap from './components/USGSMap'; // Not working on Web
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
