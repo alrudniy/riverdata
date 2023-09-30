@@ -1,4 +1,5 @@
 import React, { useState, useEffect} from 'react';
+import { Platform } from 'react-native';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -11,12 +12,20 @@ import RDInfoTab from './components/RDInfoTab';
 import RDStateSitesScreen from './components/RDStateSites';
 import RDSiteGaugesScreen from './components/RDSiteGauges';
 import RDGaugeGraphScreen from './components/RDGaugeGraph';
-import USGSMap from './components/USGSMap'; // Not working on Web
+
+//Conditionally import based on the platform
+let USGSMap;
+
+if (Platform.OS === 'ios' || Platform.OS === 'android') {
+  // Import for React Native
+  USGSMap = require('./components/USGSMap').default;
+}
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const RDStatesStack = () => {
+  
   return (
     <Stack.Navigator>
       <Stack.Screen name="River Data" component={RDStatesScreen} options={{
@@ -53,7 +62,7 @@ const RDStatesStack = () => {
         })}
       />
       <Stack.Screen name="Gauge Graph" component={RDGaugeGraphScreen} />
-      <Stack.Screen name="Map" component={USGSMap} />
+      {Platform.OS !== 'web' && <Stack.Screen name="Map" component={USGSMap} />}
     </Stack.Navigator>
   );
 };

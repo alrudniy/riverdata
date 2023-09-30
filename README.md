@@ -61,3 +61,24 @@ These instructions assume you have already cloned this repository.
 The iOS simulator looks like so:
 
 ![Alt text](riverdata/docs/ios_simulator_launched.png)
+
+# Troubleshooting
+
+## ERR_OSSL_EVP_UNSUPPORTED when running web
+
+```
+opensslErrorStack: [ 'error:03000086:digital envelope routines::initialization error' ],
+  library: 'digital envelope routines',
+  reason: 'unsupported',
+  code: 'ERR_OSSL_EVP_UNSUPPORTED'
+  ```
+
+  If you see this error on `npm run web`, run this command:
+
+  * Unix
+
+  `export NODE_OPTIONS=--openssl-legacy-provider`
+
+  * Windows
+
+  `set NODE_OPTIONS=--openssl-legacy-provider`
