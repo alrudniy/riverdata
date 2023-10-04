@@ -5,7 +5,12 @@
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "33122598-56c7-4593-acdf-b46e8ec57acf"
+      }
+    }
   },
   "name": "riverdata"
 }
