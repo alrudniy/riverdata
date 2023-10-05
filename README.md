@@ -1,3 +1,8 @@
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) 
+[![React Native](https://img.shields.io/badge/React%20Native-0.69.x-blue.svg)](https://reactnative.dev/)
+[![Expo](https://img.shields.io/badge/Expo-SDK%2043-blueviolet.svg)](https://docs.expo.dev/)
+[![Built with Expo EAS](https://img.shields.io/badge/Built%20with-Expo%20EAS-blue.svg)](https://docs.expo.dev/build/introduction/)
+
 # riverdata-react-native
 River Data application written in React Native
 
@@ -5,6 +10,7 @@ River Data application written in React Native
 
 * Node JS and NPM ([intallation instructions](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm))
 * Make sure Expo is on the CLI ([install instructions](https://docs.expo.dev/get-started/installation/#expo-cli))
+* An [Expo](expo.dev) account in order to access [EAS Builds for RiverData](https://expo.dev/accounts/drew-csci340)
 
 # Mobile Pre-requisites
 

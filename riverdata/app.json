@@ -1,5 +1,6 @@
 {
   "expo": {
+    "owner": "drew-csci340",
     "name": "riverdata",
     "slug": "riverdata",
     "version": "1.0.0",
@@ -8,7 +9,7 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "33122598-56c7-4593-acdf-b46e8ec57acf"
+        "projectId": "f2044402-6b85-4461-a3cd-f2fb1792dd38"
       }
     }
   },
