@@ -11,6 +11,9 @@
       "eas": {
         "projectId": "f2044402-6b85-4461-a3cd-f2fb1792dd38"
       }
+    },
+    "android": {
+      "package": "com.drew.riverdata"
     }
   },
   "name": "riverdata"
