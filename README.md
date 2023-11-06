@@ -14,7 +14,15 @@ River Data application written in React Nativepod
 
 # Mobile Pre-requisites
 
-* [XCode version 14+](https://apps.apple.com/us/app/xcode/id497799835?mt=12/) (for running ios)
+* [XCode version 14+](https://apps.apple.com/us/app/xcode/id497799835?mt=12/) (for running iOS simulator)
+* [Adroid Studio](https://developer.android.com/studio) - (for running Android simulator)
+  * `adb` must be on on the `PATH` environment variable.
+  * `JDK` must be installed with the `JAVA_HOME` envrionment variable defined.
+  * `ANDROID_HOME` must be set in the environment.
+
+For more information on running a React Native app, please see [Running on Device](https://reactnative.dev/docs/running-on-device).
+
+For more information on setting up the React Native CLI, please see [React Native CLI Quickstart](https://reactnative.dev/docs/environment-setup?os=macos&platform=android&guide=native#jdk-studio).
 
 # Cloing this repository
 
@@ -68,6 +76,9 @@ The iOS simulator looks like so:
 
 <img src="riverdata/docs/ios_simulator_launched.png" alt="Alt text" width="300" />
 
+The Android simulator looks like this:
+
+<img src="riverdata/docs/android_simulator_launched.png" alt="Alt text" width="300" />
 
 # Building Artifacts
 
@@ -133,3 +144,12 @@ opensslErrorStack: [ 'error:03000086:digital envelope routines::initialization e
   * Windows
 
   `set NODE_OPTIONS=--openssl-legacy-provider`
+
+  ## General tools or environment problems
+
+  If you encounter any problems related to tools, such as missing Java, ANDROID_HOME, or just other weird issues run the npx cli doctor from the root of this repository:
+
+  `npx @react-native-community/cli doctor`
+
+  <img src="riverdata/docs/cli_doctor.png" alt="Alt text" width="300" />
+
