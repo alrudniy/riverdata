@@ -42,6 +42,10 @@ If you are running XCode 15, please do the following:
 1. Navigate to `riverdata/riverdata/ios/Pods/` and open `Pods.xcodeproj`.
 1. Follow the instructions [in this issue comment](https://github.com/facebook/react-native/issues/37748) from June 7 and add the preprocessor macro: `_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION`
 
+## Android Specific steps
+
+Make sure you read all of the  [Setting up the development environment](https://reactnative.dev/docs/environment-setup?os=macos&platform=android&guide=native) steps. Select  your development OS and target OS (Android) and then ensure you have installed the Java Development Kit, Android Development Environment and have the Android SDK configured properly.
+
 # Running the Project from a Terminal
 
 The first time you clone the project you will need to run:
