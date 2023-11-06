@@ -1,6 +1,5 @@
 import React, { useState, useEffect} from 'react';
 import { Platform } from 'react-native';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';

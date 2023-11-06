@@ -7,6 +7,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Item from './Item';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
 
 
 const RDStateSitesScreen = ({ route, navigation }) => {
@@ -183,7 +185,8 @@ const RDStateSitesScreen = ({ route, navigation }) => {
     
   
     return (
-      <Swipeable renderRightActions={rightSwipe}>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <Swipeable renderRightActions={rightSwipe}>
         <View style={styles.item}>
           <Item
             key={siteKey}
@@ -195,10 +198,12 @@ const RDStateSitesScreen = ({ route, navigation }) => {
           />
         </View>
       </Swipeable>
+     </GestureHandlerRootView>
+
     );
   };
   
-  
+
   return (
     <View style={styles.container}>
       {err && <Text style={styles.error}>{err}</Text>}

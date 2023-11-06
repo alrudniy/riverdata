@@ -1,11 +1,29 @@
 {
   "expo": {
+    "owner": "drew-csci340",
     "name": "riverdata",
     "slug": "riverdata",
     "version": "1.0.0",
+    "jsEngine": "hermes",
+    "ios": {
+      "jsEngine": "jsc"
+    },
     "assetBundlePatterns": [
       "**/*"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "f2044402-6b85-4461-a3cd-f2fb1792dd38"
+      },
+      "ios": {
+      "config": {
+        "hermes": true
+      }
+    }
+    },
+    "android": {
+      "package": "com.drew.riverdata"
+    }
   },
   "name": "riverdata"
 }

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, StyleSheet, Animated, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Item from './Item';
 
@@ -63,18 +64,20 @@ const RDFavoritesTab = ({ navigation }) => {
     };
   
     return (
-      <Swipeable renderRightActions={rightSwipe}>
-        <View style={styles.item}>
-          <Item
-            key={`${item.siteName}_${item.siteValue}`}
-            label={item.siteName}
-            description={<Text style={styles.gauges}>{`${item.gauges} gauges`}</Text>}
-            onPress={() => {
-              navigation.navigate('Site Gauges', { gaugeId: item.siteValue });
-            }}
-          />
-        </View>
-      </Swipeable>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <Swipeable renderRightActions={rightSwipe}>
+          <View style={styles.item}>
+            <Item
+              key={`${item.siteName}_${item.siteValue}`}
+              label={item.siteName}
+              description={<Text style={styles.gauges}>{`${item.gauges} gauges`}</Text>}
+              onPress={() => {
+                navigation.navigate('Site Gauges', { gaugeId: item.siteValue });
+              }}
+            />
+          </View>
+        </Swipeable>
+      </GestureHandlerRootView>
     );
   };  
 
