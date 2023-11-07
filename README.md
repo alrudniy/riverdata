@@ -14,7 +14,15 @@ River Data application written in React Nativepod
 
 # Mobile Pre-requisites
 
-* [XCode version 14+](https://apps.apple.com/us/app/xcode/id497799835?mt=12/) (for running ios)
+* [XCode version 14+](https://apps.apple.com/us/app/xcode/id497799835?mt=12/) (for running iOS simulator)
+* [Adroid Studio](https://developer.android.com/studio) - (for running Android simulator)
+  * `adb` must be on on the `PATH` environment variable.
+  * `JDK` must be installed with the `JAVA_HOME` envrionment variable defined.
+  * `ANDROID_HOME` must be set in the environment.
+
+For more information on running a React Native app, please see [Running on Device](https://reactnative.dev/docs/running-on-device).
+
+For more information on setting up the React Native CLI, please see [React Native CLI Quickstart](https://reactnative.dev/docs/environment-setup?os=macos&platform=android&guide=native#jdk-studio).
 
 # Cloing this repository
 
@@ -33,6 +41,10 @@ If you are running XCode 15, please do the following:
 
 1. Navigate to `riverdata/riverdata/ios/Pods/` and open `Pods.xcodeproj`.
 1. Follow the instructions [in this issue comment](https://github.com/facebook/react-native/issues/37748) from June 7 and add the preprocessor macro: `_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION`
+
+## Android Specific steps
+
+Make sure you read all of the  [Setting up the development environment](https://reactnative.dev/docs/environment-setup?os=macos&platform=android&guide=native) steps. Select  your development OS and target OS (Android) and then ensure you have installed the Java Development Kit, Android Development Environment and have the Android SDK configured properly.
 
 # Running the Project from a Terminal
 
@@ -68,6 +80,9 @@ The iOS simulator looks like so:
 
 <img src="riverdata/docs/ios_simulator_launched.png" alt="Alt text" width="300" />
 
+The Android simulator looks like this:
+
+<img src="riverdata/docs/android_simulator_launched.png" alt="Alt text" width="300" />
 
 # Building Artifacts
 
@@ -133,3 +148,12 @@ opensslErrorStack: [ 'error:03000086:digital envelope routines::initialization e
   * Windows
 
   `set NODE_OPTIONS=--openssl-legacy-provider`
+
+  ## General tools or environment problems
+
+  If you encounter any problems related to tools, such as missing Java, ANDROID_HOME, or just other weird issues run the npx cli doctor from the root of this repository:
+
+  `npx @react-native-community/cli doctor`
+
+  <img src="riverdata/docs/cli_doctor.png" alt="Alt text" width="300" />
+

@@ -1,9 +1,6 @@
 {
     "version": "0.2.0",
     "configurations": [
-
-
-
         Debug
         {
             "type": "node-terminal",
@@ -20,6 +17,13 @@
             "name": "npm run ios",
             "request": "launch",
             "command": "npm run ios",
+            "cwd": "${workspaceFolder}/riverdata"
+        },
+        {
+            "type": "node-terminal",
+            "name": "npm run android",
+            "request": "launch",
+            "command": "npm run android",
             "cwd": "${workspaceFolder}/riverdata"
         }
     ]
