@@ -1,7 +1,6 @@
 {
     "version": "0.2.0",
     "configurations": [
-        Debug
         {
             "type": "node-terminal",
             "name": "npm run web",
