@@ -33,8 +33,14 @@ allprojects {
             url(new File(['node', '--print', "require.resolve('jsc-android/package.json')"].execute(null, rootDir).text.trim(), '../dist'))
         }
 
+        maven { url 'https://www.jitpack.io' }
+        configurations.all {
+            resolutionStrategy {
+                // use 0.10.4+ to fix crash on Android: https://support.google.com/faqs/answer/12576726
+                force "com.facebook.soloader:soloader:0.10.5+"
+            }
+        }
         google()
         mavenCentral()
-        maven { url 'https://www.jitpack.io' }
     }
 }
