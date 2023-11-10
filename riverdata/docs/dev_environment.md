@@ -1,10 +1,15 @@
+- [River Data Development Environment](#river-data-development-environment)
+  - [Branches](#branches)
+  - [Reviewing pull requests](#reviewing-pull-requests)
+  - [Gitflow](#gitflow)
+  
 # River Data Development Environment
 
 The image below show the general development environment for individual and collaborative development of the river data project. This is meant to be a high level over view of the tools and flows the team should be aware of for effective collaboration.
 
 ![alt](./river_data_dev_env.png)
 
-NOTE: The above image was created with [Excalidraw](https://excalidraw.com/). You can use Excalidraw for free and download your images and designs for later use. The sketch above was downloaded in Excalidraw format in [river_data_dev_environment.excalidraw](./river_data_dev_environment.excalidraw)
+NOTE: The above image was created with [Excalidraw](https://excalidraw.com/). You can use Excalidraw for free and download your images and designs for later use. The sketch above was downloaded in Excalidraw format in [river_data_dev_environment.excalidraw](./river_data_dev_environment.excalidraw). There's also a [VS Code plugin for Excalidraw](https://marketplace.visualstudio.com/items?itemName=pomdtr.excalidraw-editor) that you can open of `.excalidraw` docs right in VS Code - _très cool_.
 
 ## Branches
 

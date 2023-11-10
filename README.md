@@ -6,6 +6,11 @@
 # riverdata-react-native
 River Data application written in React Nativepod 
 
+# Additional docs in this repository
+
+* [Development Environment](./riverdata/docs/dev_environment.md) - A description of the development envrionment and branching policy.
+* [Fall'23 Challenges](./riverdata/docs/fall23_challenges.md) - Some notes on what the team can start to work on in S/M/L complexity.
+
 # General Pre-requisites
 
 * Node JS and NPM ([intallation instructions](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm))
