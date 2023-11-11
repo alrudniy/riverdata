@@ -1,15 +1,8 @@
 import React, { useEffect, useState, useLayoutEffect } from 'react';
-import { Animated, ActivityIndicator, TouchableOpacity, View, Text, FlatList, StyleSheet, TextInput } from 'react-native';
-import { NavigationActions } from "react-navigation";
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { View, Text, FlatList, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Item from './Item';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Swipeable from 'react-native-gesture-handler/Swipeable';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-
-
 
 const RDStateSitesScreen = ({ route, navigation }) => {
   const [data, setData] = useState({ value: { timeSeries: [] } });
@@ -20,8 +13,8 @@ const RDStateSitesScreen = ({ route, navigation }) => {
   const [siteName, setSiteName] = useState('');
   const [stateName, setStateName] = useState('');
   const [filterNumbers, setFilterNumbers] = useState(false);
-  const [loadingMessage, setLoadingMessage] = useState(''); 
-  
+  const [loadingMessage, setLoadingMessage] = useState('');
+  const [favoritedStatus, setFavoritedStatus] = useState({});
 
   const { stateId } = route.params;
 
@@ -86,14 +79,14 @@ const RDStateSitesScreen = ({ route, navigation }) => {
   }).filter((site) => {
     return !filterNumbers || /^[^a-zA-Z]/.test(site.siteName) === false;
   });
-  
+
   const handlePress = (name) => {
     setSiteName(name);
   }
 
   const handleFilterNumbers = () => {
     setFilterNumbers(!filterNumbers);
-  } // new function to toggle filterNumbers state variable
+  }
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -107,15 +100,8 @@ const RDStateSitesScreen = ({ route, navigation }) => {
 
   const fetchFavoritedStatus = async () => {
     try {
-      const favorites = JSON.parse(await AsyncStorage.getItem('favorites')) || [];
-      const newFavoritedStatus = {};
-  
-      favorites.forEach((favorite) => {
-        const siteKey = `${favorite.siteName}_${favorite.siteValue}`;
-        newFavoritedStatus[siteKey] = true;
-      });
-  
-      setFavoritedStatus(newFavoritedStatus);
+      const favorites = JSON.parse(await AsyncStorage.getItem('favorites')) || {};
+      setFavoritedStatus(favorites);
     } catch (error) {
       console.error('Error fetching favorited status:', error);
     }
@@ -124,85 +110,58 @@ const RDStateSitesScreen = ({ route, navigation }) => {
   useEffect(() => {
     handleClick();
     fetchFavoritedStatus();
-  }, []);  
-  
+  }, []);
+
   const handleFavorite = async (site) => {
     let favorited = false;
     try {
-      const favorites = JSON.parse(await AsyncStorage.getItem('favorites')) || [];
-      const index = favorites.findIndex((favorite) => favorite.siteValue === site.siteValue);
-  
-      if (index >= 0) {
-        // Remove site from favorites if it's already there
-        favorites.splice(index, 1);
+      const updatedFavoritedStatus = { ...favoritedStatus };
+      if (site.siteValue in favoritedStatus) {
+        delete updatedFavoritedStatus[site.siteValue];
       } else {
-        // Add site to favorites if it's not there
-        favorites.push(site);
+        updatedFavoritedStatus[site.siteValue] = true;
         favorited = true;
       }
-  
-      await AsyncStorage.setItem('favorites', JSON.stringify(favorites));
+
+      await AsyncStorage.setItem('favorites', JSON.stringify(updatedFavoritedStatus));
+      setFavoritedStatus(updatedFavoritedStatus);
     } catch (error) {
       console.error('Error handling favorite site:', error);
     }
     return favorited;
   };
-  
-  const [favoritedStatus, setFavoritedStatus] = useState({});
 
-  const renderSwipeableItem = ({ item }) => {
-    const siteKey = `${item.siteName}_${item.siteValue}`;
-    const isFavorited = favoritedStatus[siteKey] || false;
-  
-    const rightSwipe = (progress, dragX) => {
-      const scale = dragX.interpolate({
-        inputRange: [-80, 0],
-        outputRange: [1, 0],
-        extrapolate: 'clamp',
-      });
-    
-      return (
+  const renderListItem = ({ item }) => {
+    const isFavorited = favoritedStatus[item.siteValue] || false;
+
+    return (
+      <View style={styles.item}>
+        <Item
+          label={item.siteName}
+          description={<Text style={styles.gauges}>{`${item.gauges} gauges`}</Text>}
+          onPress={() => {
+            navigation.navigate('Site Gauges', { gaugeId: item.siteValue });
+          }}
+        />
         <TouchableOpacity
           onPress={async () => {
             const updatedFavoritedStatus = await handleFavorite(item);
-            setFavoritedStatus({ ...favoritedStatus, [siteKey]: updatedFavoritedStatus });
+            setFavoritedStatus(updatedFavoritedStatus);
           }}
           style={[
-            styles.swipeButton,
-            isFavorited ? styles.swipeButtonFavorited : styles.swipeButtonNotFavorited,
+            styles.heartButton,
+            isFavorited ? styles.heartButtonFavorited : styles.heartButtonNotFavorited,
           ]}
         >
-          <Animated.View style={{ transform: [{ scale }] }}>
-            <Ionicons
-              name={isFavorited ? 'heart' : 'heart-outline'}
-              size={28}
-              color="white"
-            />
-          </Animated.View>
-        </TouchableOpacity>
-      );
-    };
-    
-  
-    return (
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <Swipeable renderRightActions={rightSwipe}>
-        <View style={styles.item}>
-          <Item
-            key={siteKey}
-            label={item.siteName}
-            description={<Text style={styles.gauges}>{`${item.gauges} gauges`}</Text>}
-            onPress={() => {
-              navigation.navigate('Site Gauges', { gaugeId: item.siteValue });
-            }}
+          <Ionicons
+            name={isFavorited ? 'heart' : 'heart-outline'}
+            size={28}
+            color="white"
           />
-        </View>
-      </Swipeable>
-     </GestureHandlerRootView>
-
+        </TouchableOpacity>
+      </View>
     );
   };
-  
 
   return (
     <View style={styles.container}>
@@ -215,23 +174,22 @@ const RDStateSitesScreen = ({ route, navigation }) => {
         value={search}
       />
       {loading ? (
-             <View style={styles.loadingContainer}>
-             <Text style={styles.loadingText}>{loadingMessage}</Text>
-             <ActivityIndicator size="large" color="#125EA4" style={styles.loading} />
-             <Text style={styles.loadingText}>Loading Sites</Text>
-           </View>
+        <View style={styles.loadingContainer}>
+          <Text style={styles.loadingText}>{loadingMessage}</Text>
+          <ActivityIndicator size="large" color="#125EA4" style={styles.loading} />
+          <Text style={styles.loadingText}>Loading Sites</Text>
+        </View>
       ) : (
         <FlatList
           data={filteredSites}
-          renderItem={renderSwipeableItem}
-          keyExtractor={(item) => `${item.siteName}_${item.siteValue}`}
+          renderItem={renderListItem}
+          keyExtractor={(item) => item.siteValue}
           ItemSeparatorComponent={() => <View style={styles.separator} />}
         />
       )}
     </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   container: {
@@ -254,6 +212,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#f8f8f8',
     borderRadius: 10,
     marginBottom: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   searchBar: {
     height: 40,
@@ -268,15 +229,10 @@ const styles = StyleSheet.create({
     marginHorizontal: 2,
     marginTop: -10,
   },
-  siteName: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 5,
-  },
   gauges: {
     fontStyle: 'italic',
   },
-    loadingContainer: {
+  loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
@@ -293,22 +249,29 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#125EA4',
   },
-  swipeButton: {
+  heartButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#125EA4',
     justifyContent: 'center',
-    alignItems: 'flex-end',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 10,
-    marginBottom: 10,
+    alignItems: 'center',
+    marginLeft: 10,
   },
-  swipeButtonNotFavorited: {
+  heartButtonNotFavorited: {
     backgroundColor: '#125EA4',
   },
-  swipeButtonFavorited: {
+  heartButtonFavorited: {
     backgroundColor: '#C41E3A',
-  },  
+  },
+  separator: {
+    height: 1,
+    backgroundColor: '#ddd',
+    marginVertical: 5,
+  },
+  filterButton: {
+    marginRight: 10,
+  },
 });
-
-
 
 export default RDStateSitesScreen;
